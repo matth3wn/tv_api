@@ -23,9 +23,10 @@
     "start": "node src/server.js",
     "test": "mocha --require test/setup.js",
     "dev": "nodemon src/server.js",
-    "predeploy": "yarn run migrate",
+    "predeploy": "yarn run migrate-production",
     "deploy": "git push heroku master",
-    "migrate": "postgrator --config postgrator-config.js"
+    "migrate": "postgrator --config postgrator-config.js",
+    "migrate-production": "postgrator --config postgrator-production.js"
   },
   "devDependencies": {
     "chai": "^4.2.0",
