@@ -29,7 +29,7 @@ app.use('/', proxy({ target: 'https://api.thetvdb.com', changeOrigin: true, logL
 app.use(function errorHandler(error, req, res, next) {
   let response
   if (NODE_ENV === 'production') {
-    console.log(response)
+    console.error(error)
     response = { error: { message: 'server error' } }
   } else {
     console.error(error)
