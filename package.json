@@ -26,7 +26,7 @@
     "predeploy": "yarn run migrate-production",
     "deploy": "git push heroku master",
     "migrate": "postgrator --config postgrator-config.js",
-    "migrate-production": "postgrator --config postgrator-production.js"
+    "migrate-production": "postgrator --config postgrator-production-config.js"
   },
   "devDependencies": {
     "chai": "^4.2.0",
