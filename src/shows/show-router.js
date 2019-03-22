@@ -58,12 +58,13 @@ addRouter.patch('/', requireAuth, jsonBodyParser, (req, res, next) => {
         duration: newDuration || duration,
         network: newNetwork || network
       }
-      AddService.update(req.app.get('db'), uuid, updatedShow)
+      AddService.update(req.app.get('db'), uuid, AddService.serializeShow(updatedShow))
       .then(results => {
+        console.log(results)
         if(results > 0)
           res.status(200).json(results);
         else  
-          res(400).send('Something went wrong =(');
+          res(400).send('Something went wrong 🙁');
       })
       .catch(next)
     })
