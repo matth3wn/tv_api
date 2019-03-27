@@ -163,7 +163,7 @@ describe('Testing TV endpoints', () => {
       .expect(204, next)
   })
 
-  it('UPDATE /api/myshows/:id should return 201 when trying to post with JWT', (next) => {
+  it('UPDATE /api/myshows/:id should return 200 when trying to post with JWT', (next) => {
     let show = {
       title: 'show1_new',
       content: 'something',
@@ -183,6 +183,28 @@ describe('Testing TV endpoints', () => {
       })
       .send(show)
       .expect(200, next)
+  })
+
+  it('UPDATE /api/myshows/:id should return 500 when trying to post with JWT', (next) => {
+    let show = {
+      title: 'show1_new',
+      content: 'something',
+      show_time: '9:00 AM',
+      day: 'Daily',
+      duration: 30,
+      user_id: 1,
+      network: 'Some network',
+
+    }
+
+    supertest(app)
+      .patch('/api/myshows/id_that_does_not_exist')
+      .set({
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NTM3MTA0NTMsImV4cCI6MTU1MzcyMTI1Mywic3ViIjoidGFjbyJ9.cIJaHj8DoAe5Kv5CvLIzu3L2jxK57o2YFNoKSfZa2ws',
+        Accept: 'application/json'
+      })
+      .send(show)
+      .expect(500, next)
   })
 
   it('GET /api/myshows/:id should return 200', (next) => {
