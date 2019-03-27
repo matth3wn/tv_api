@@ -79,7 +79,6 @@ addRouter.get('/', requireAuth, (req, res, next) => {
 })
 
 addRouter.delete('/', requireAuth, jsonBodyParser, (req, res, next) => {
-  console.log(req.body)
   const { id } = req.body;
   AddService.delete(req.app.get('db'), id)
     .then(result =>{
