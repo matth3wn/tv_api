@@ -1,14 +1,19 @@
 const app = require('../src/app')
+const expect = require('chai').expect;
 const knexFn = require('knex');
 const { PORT } = require('../src/config');
 const Shows = require('./fixtureShows');
 const User = require('./fixturesUsers');
+const AuthService = require('../src/auth/auth-service');
 const tableName = 'shows';
 const userTable = 'users';
 
 describe('Testing TV endpoints', () => {
 
   let db;
+
+  const sub = 'taco';
+  const payload = { user_id: 7};
 
   before((next) => {
     db = knexFn({
@@ -55,7 +60,8 @@ describe('Testing TV endpoints', () => {
         .expect(400, next)
     })
 
-    it('INSERT /api/users should return 201', (next) => {
+    it('INSERT /api/users should return 400 if username is already taken2', (next) => {
+      db.raw('delete * from users');
       const newUser = {
         user_name: 'taco3',
         password: 'passworD1!',
@@ -65,7 +71,7 @@ describe('Testing TV endpoints', () => {
       supertest(app)
         .post('/api/users')
         .send(newUser)
-        .expect(201, next)
+        .expect({ error: 'Username already taken' }, next)
     })
 
     it('INSERT /api/users should return 400 if username is already taken', (next) => {
@@ -132,7 +138,7 @@ describe('Testing TV endpoints', () => {
       supertest(app)
         .post('/api/shows')
         .set({
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NTM3MTcwMTQsImV4cCI6MTU1MzcyNzgxNCwic3ViIjoidGFjbyJ9.VAtECafcQckgBxIBpuaHZBPnVvdDSJJy9RLgAlC1_jE',
+          'Authorization': `Bearer ${AuthService.createJwt(sub, payload)}`,
           Accept: 'application/json'
         })
         .send(show)
@@ -145,7 +151,7 @@ describe('Testing TV endpoints', () => {
       supertest(app)
         .delete('/api/shows')
         .set({
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NTM3MTcwMTQsImV4cCI6MTU1MzcyNzgxNCwic3ViIjoidGFjbyJ9.VAtECafcQckgBxIBpuaHZBPnVvdDSJJy9RLgAlC1_jE',
+          'Authorization': `Bearer ${AuthService.createJwt(sub, payload)}`,
           Accept: 'application/json'
         })
         .send(id)
@@ -158,16 +164,16 @@ describe('Testing TV endpoints', () => {
       supertest(app)
         .delete('/api/shows')
         .set({
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NTM3MTcwMTQsImV4cCI6MTU1MzcyNzgxNCwic3ViIjoidGFjbyJ9.VAtECafcQckgBxIBpuaHZBPnVvdDSJJy9RLgAlC1_jE',
+          'Authorization': `Bearer ${AuthService.createJwt(sub, payload)}`,
           Accept: 'application/json'
         })
         .send(id)
-        .expect(204, next)
+        .expect(404, next)
     })
 
     it('UPDATE /api/myshows/:id should return 200 when trying to post with JWT', (next) => {
       let show = {
-        title: 'show1_new',
+        title: '',
         content: 'something',
         show_time: '9:00 AM',
         day: 'Daily',
@@ -178,9 +184,9 @@ describe('Testing TV endpoints', () => {
       }
 
       supertest(app)
-        .patch('/api/myshows/b679e4f1-d3c6-49cb-98cb-d37939a34b4a')
+        .patch('/api/myshows/9c972957-4501-44ca-9e8f-9c4f52c5cf15')
         .set({
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NTM3MTcwMTQsImV4cCI6MTU1MzcyNzgxNCwic3ViIjoidGFjbyJ9.VAtECafcQckgBxIBpuaHZBPnVvdDSJJy9RLgAlC1_jE',
+          'Authorization': `Bearer ${AuthService.createJwt(sub, payload)}`,
           Accept: 'application/json'
         })
         .send(show)
@@ -202,7 +208,7 @@ describe('Testing TV endpoints', () => {
       supertest(app)
         .patch('/api/myshows/id_that_does_not_exist')
         .set({
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NTM3MTcwMTQsImV4cCI6MTU1MzcyNzgxNCwic3ViIjoidGFjbyJ9.VAtECafcQckgBxIBpuaHZBPnVvdDSJJy9RLgAlC1_jE',
+          'Authorization': `Bearer ${AuthService.createJwt(sub, payload)}`,
           Accept: 'application/json'
         })
         .send(show)
@@ -214,7 +220,7 @@ describe('Testing TV endpoints', () => {
       supertest(app)
         .get('/api/myshows/b679e4f1-d3c6-49cb-98cb-d37939a34b4a')
         .set({
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NTM3MTcwMTQsImV4cCI6MTU1MzcyNzgxNCwic3ViIjoidGFjbyJ9.VAtECafcQckgBxIBpuaHZBPnVvdDSJJy9RLgAlC1_jE',
+          'Authorization': `Bearer ${AuthService.createJwt(sub, payload)}`,
           Accept: 'application/json'
         })
         .expect(200, next)
@@ -225,7 +231,7 @@ describe('Testing TV endpoints', () => {
       supertest(app)
         .get('/api/myshows/something')
         .set({
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1NTM3MTcwMTQsImV4cCI6MTU1MzcyNzgxNCwic3ViIjoidGFjbyJ9.VAtECafcQckgBxIBpuaHZBPnVvdDSJJy9RLgAlC1_jE',
+          'Authorization': `Bearer ${AuthService.createJwt(sub, payload)}`,
           Accept: 'application/json'
         })
         .expect(404, next)
