@@ -1,31 +1,68 @@
-# Express Boilerplate!
+<h1>TV App</h1>
+The TV App allows users the ability keep track of the air times of their favorite shows. They are able to make searches for and add shows to a list and the app will put the shows on a calendar telling them when those shows will air. The search feature uses the TheTVDB API, so if the search query that was entered is not in TheTVDB, users are can manually add the show themselves. Users also have the ability to edit the title, time, day, network, summary, and duartion of the show.    
 
-This is a boilerplate project used for starting new projects!
+<img src="./images/search.png"
+     alt="calendar" />
+<img src="./images/calendar.png"
+     alt="calendar" />
 
-## Set up
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+**Live link: https://matt-tv-app.matth3wn.now.sh/**  
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+Demo user:  
+- username: taco
+- password: passworD1!  
+  
 
-## Scripts
+<h2>API Documentation:</h2>
 
-Start the application `npm start`
+Base API URL: https://afternoon-crag-65094.herokuapp.com/api
 
-Start nodemon for the application `npm run dev`
+Schema: All data is sent and received as JSON.
 
-Run the tests `npm test`
+**Available Endpoints:**
+- /auth/login POST
+- /auth/refresh POST
+- /users POST
+- /shows POST
+- /shows GET
+- /shows DELETE
+- /myshows/:id GET
+- /myshows/:id PATCH
 
-## Deploying
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+  
+**Technology used**
+- Postgres
+- Express
+- React
+- Node.js
 
-## Notes
 
-To set a config var in heroku:
-heroku config:set API_TOKEN=password
+<!-- <br/>  
+  Parameters:  
+  <p> 
+    full_name: string <br/> 
+    user_name: string <br/>  
+    password: string  <br/>  
+  </p>
+</br>
+  Response:
+  <p>
+  201 </br>
+  { </br>
+  &#160;&#160;"id":3,<br/> 
+  &#160;&#160;"full_name":"new user",<br/> 
+  &#160;&#160;"user_name":"taco1",<br/> 
+  &#160;&#160;"date_created":"2019-03-29T17:40:36.949Z"
+  </br>
+  } 
+  </p>
+
+  <p>
+  400 </br>
+  { </br>
+    &#160;&#160; error: 'error message'
+  </br>
+  } 
+  </p> --> 
